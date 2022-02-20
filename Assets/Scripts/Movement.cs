@@ -8,6 +8,9 @@ public class Movement : MonoBehaviour
     [SerializeField] float mainThrust = 1000f;
     [SerializeField] float rotationThrust = 100f;
     [SerializeField] AudioClip engineClip;
+    [SerializeField] ParticleSystem MainThrusterParticular;
+    [SerializeField] ParticleSystem RightThrusterParticular;
+    [SerializeField] ParticleSystem LeftThrusterParticular;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,33 +30,58 @@ public class Movement : MonoBehaviour
     private void ProcessThrust()
     {
         if (Input.GetKey(KeyCode.Space))
-        {
-            rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
-            if(!audioSource.isPlaying)
-            {
-                audioSource.PlayOneShot(engineClip);
-            }
-            Debug.Log("pressed cart curt");
-        } else
-        {
-            audioSource.Stop();
-
-        }
+            StartThrusting();
+        else
+            StopThrusting();
     }
 
+    private void StartThrusting()
+    {
+        rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(engineClip);
+        }
+        if (!MainThrusterParticular.isPlaying)
+        {
+            MainThrusterParticular.Play();
+        }
+    }
+    private void StopThrusting()
+    {
+        audioSource.Stop();
+        MainThrusterParticular.Stop();
+    }
     private void ProcessRotation()
     {
         if (Input.GetKey(KeyCode.A))
         {
-            ApplyRotation(rotationThrust);
-
-            Debug.Log("pressed a");
+            // Left Rotate
+            Rotate(rotationThrust, LeftThrusterParticular);
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            ApplyRotation(-rotationThrust);
-            Debug.Log("pressed b");
+            // Right Rotate
+            Rotate(-rotationThrust, RightThrusterParticular);
+        } else
+        {
+            RightThrusterParticular.Stop();
+            LeftThrusterParticular.Stop();
         }
+    }
+
+    private void Rotate(float rotationThrust, ParticleSystem particular)
+    {
+        ApplyRotation(rotationThrust);
+        ParticulSides(particular);
+    }
+
+    private void ParticulSides(ParticleSystem particular)
+    {
+        if (!particular.isPlaying)
+        {
+            particular.Play();
+        } 
     }
 
     private void ApplyRotation(float rotationThisFrame)
