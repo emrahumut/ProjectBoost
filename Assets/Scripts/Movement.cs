@@ -42,10 +42,7 @@ public class Movement : MonoBehaviour
         {
             audioSource.PlayOneShot(engineClip);
         }
-        if (!MainThrusterParticular.isPlaying)
-        {
-            MainThrusterParticular.Play();
-        }
+        Particul(MainThrusterParticular);
     }
     private void StopThrusting()
     {
@@ -73,10 +70,10 @@ public class Movement : MonoBehaviour
     private void Rotate(float rotationThrust, ParticleSystem particular)
     {
         ApplyRotation(rotationThrust);
-        ParticulSides(particular);
+        Particul(particular);
     }
 
-    private void ParticulSides(ParticleSystem particular)
+    private void Particul(ParticleSystem particular)
     {
         if (!particular.isPlaying)
         {
