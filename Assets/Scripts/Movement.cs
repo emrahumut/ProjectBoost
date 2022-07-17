@@ -24,7 +24,6 @@ public class Movement : MonoBehaviour
     {
         ProcessThrust();
         ProcessRotation();
-
     }
 
     private void ProcessThrust()
